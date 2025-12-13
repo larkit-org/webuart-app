@@ -10,7 +10,7 @@ export function AppHeader({ children }: AppHeaderProps) {
     <div className="flex justify-between items-center w-full">
       <div className="flex items-center gap-3">
         <img src="/logo.png" alt="Logo" className="w-7 h-7 dark:invert" />
-        <h1 className="text-xl font-bold">True WebSerial</h1>
+        <h1 className="text-xl font-bold">WebUART <span className="text-sm font-normal text-muted-foreground">(Web Serial API)</span></h1>
       </div>
       <div className="flex items-center gap-1">
         <ThemeToggle />
