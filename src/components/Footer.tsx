@@ -26,7 +26,7 @@ export function Footer() {
           </a>
 
           <a
-            href="https://revolut.me/nicksmirnov"
+            href="https://revolut.me/cyberkosta"
             target="_blank"
             rel="noopener noreferrer"
           >
