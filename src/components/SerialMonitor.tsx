@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { saveAs } from 'file-saver'
 import { Maximize2, Minimize2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { Terminal } from '@xterm/xterm'
@@ -152,44 +152,42 @@ export function SerialMonitor({ isFullscreen, onToggleFullscreen, resizeTrigger 
 
   return (
     <Card className="h-full w-full flex flex-col overflow-hidden">
-      <CardHeader className="py-2 px-4 flex-row justify-between items-center space-y-0 flex-shrink-0">
-        <CardTitle className="text-base">{t('serialMonitor.title')}</CardTitle>
-        <div className="flex items-center gap-1">
-          <div className="flex items-center gap-2 mr-2">
-            <Switch
-              id="follow-logs"
-              checked={followLogs}
-              onCheckedChange={setFollowLogs}
-            />
-            <Label htmlFor="follow-logs" className="text-xs">
-              {t('serialMonitor.followLogs')}
-            </Label>
-          </div>
-          <Button variant="ghost" size="sm" onClick={clearTerminal}>
-            {t('serialMonitor.clear')}
-          </Button>
-          <Button variant="ghost" size="sm" onClick={exportLogs}>
-            {t('serialMonitor.export')}
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={onToggleFullscreen}
-            title={
-              isFullscreen
-                ? t('serialMonitor.minimize')
-                : t('serialMonitor.maximize')
-            }
-          >
-            {isFullscreen ? (
-              <Minimize2 className="h-4 w-4" />
-            ) : (
-              <Maximize2 className="h-4 w-4" />
-            )}
-          </Button>
+      <div className="py-1.5 px-3 flex justify-end items-center gap-1 flex-shrink-0 border-b">
+        <div className="flex items-center gap-1.5 mr-2">
+          <Switch
+            id="follow-logs"
+            checked={followLogs}
+            onCheckedChange={setFollowLogs}
+            className="scale-90"
+          />
+          <Label htmlFor="follow-logs" className="text-xs">
+            {t('serialMonitor.followLogs')}
+          </Label>
         </div>
-      </CardHeader>
+        <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={clearTerminal}>
+          {t('serialMonitor.clear')}
+        </Button>
+        <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={exportLogs}>
+          {t('serialMonitor.export')}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7"
+          onClick={onToggleFullscreen}
+          title={
+            isFullscreen
+              ? t('serialMonitor.minimize')
+              : t('serialMonitor.maximize')
+          }
+        >
+          {isFullscreen ? (
+            <Minimize2 className="h-4 w-4" />
+          ) : (
+            <Maximize2 className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
       <CardContent className="flex-1 p-2 pt-0 min-h-0 relative">
         <div
           ref={containerRef}

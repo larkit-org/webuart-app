@@ -8,6 +8,7 @@ import {
   QuickCommands,
   TimedCommands,
   LogRecords,
+  Footer,
 } from '@/components'
 import { Toaster } from '@/components/ui/sonner'
 import {
@@ -78,6 +79,7 @@ function MainContent() {
           </div>
         )}
       </div>
+      {!isFullscreen && <Footer />}
     </SidebarInset>
   )
 }

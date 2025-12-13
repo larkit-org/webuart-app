@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
@@ -61,17 +61,14 @@ export function SerialSender() {
 
   return (
     <Card className="w-full">
-      <CardHeader className="py-2 px-4">
-        <CardTitle className="text-base">{t('serialSender.title')}</CardTitle>
-      </CardHeader>
-      <CardContent className="p-2 pt-0 space-y-2">
+      <CardContent className="p-3 space-y-2">
         <Textarea
           value={message}
           onChange={(e) => handleMessageChange(e.target.value)}
           placeholder={t('serialSender.placeholder')}
           disabled={!isConnected}
-          rows={2}
-          className="resize-none"
+          rows={1}
+          className="resize-none min-h-[36px]"
         />
 
         <div className="flex flex-wrap gap-3 justify-between items-center">
@@ -80,7 +77,7 @@ export function SerialSender() {
               value={format}
               onValueChange={(v) => setFormat(v as 'ASCII' | 'HEX')}
             >
-              <SelectTrigger className="w-[90px] h-8">
+              <SelectTrigger className="w-[80px] h-7 text-xs">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -93,22 +90,24 @@ export function SerialSender() {
               </SelectContent>
             </Select>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <Switch
                 id="auto-newline"
                 checked={autoNewline}
                 onCheckedChange={setAutoNewline}
+                className="scale-90"
               />
               <Label htmlFor="auto-newline" className="text-xs">
                 {t('serialSender.autoNewline')}
               </Label>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <Switch
                 id="local-echo"
                 checked={localEcho}
                 onCheckedChange={setLocalEcho}
+                className="scale-90"
               />
               <Label htmlFor="local-echo" className="text-xs">
                 {t('serialSender.localEcho')}
@@ -118,6 +117,7 @@ export function SerialSender() {
 
           <Button
             size="sm"
+            className="h-7"
             onClick={handleSend}
             disabled={!isConnected || !message}
           >
