@@ -16,7 +16,7 @@ export function Footer() {
 
         <div className="flex items-center gap-3">
           <a
-            href="https://github.com/nicksmirnov/webuart"
+            href="https://github.com/cyberkostyan/webuart"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 hover:text-foreground transition-colors"
