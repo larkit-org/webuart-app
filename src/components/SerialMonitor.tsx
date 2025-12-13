@@ -35,6 +35,8 @@ export function SerialMonitor({ isFullscreen, onToggleFullscreen, resizeTrigger 
   const sendData = useSerialStore((state) => state.sendData)
   const addEventListener = useSerialStore((state) => state.addEventListener)
   const removeEventListener = useSerialStore((state) => state.removeEventListener)
+  const showSendPanel = useSerialStore((state) => state.showSendPanel)
+  const setShowSendPanel = useSerialStore((state) => state.setShowSendPanel)
 
   // Initialize terminal
   useEffect(() => {
@@ -153,6 +155,17 @@ export function SerialMonitor({ isFullscreen, onToggleFullscreen, resizeTrigger 
   return (
     <Card className="h-full w-full flex flex-col overflow-hidden">
       <div className="py-1.5 px-3 flex justify-end items-center gap-1 flex-shrink-0 border-b">
+        <div className="flex items-center gap-1.5 mr-2">
+          <Switch
+            id="show-send"
+            checked={showSendPanel}
+            onCheckedChange={setShowSendPanel}
+            className="scale-90"
+          />
+          <Label htmlFor="show-send" className="text-xs">
+            Send
+          </Label>
+        </div>
         <div className="flex items-center gap-1.5 mr-2">
           <Switch
             id="follow-logs"

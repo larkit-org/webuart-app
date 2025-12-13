@@ -34,6 +34,10 @@ interface SerialState {
   currentLogId: number | null
   messageBuffer: string[]
 
+  // UI state
+  showSendPanel: boolean
+  setShowSendPanel: (show: boolean) => void
+
   // Actions
   setConfig: (config: Partial<SerialConfig>) => void
   connect: () => Promise<void>
@@ -93,6 +97,9 @@ export const useSerialStore = create<SerialState>()(
       isLogRecording: false,
       currentLogId: null,
       messageBuffer: [],
+      showSendPanel: false,
+
+      setShowSendPanel: (show) => set({ showSendPanel: show }),
 
       setConfig: (newConfig) =>
         set((state) => ({
@@ -504,6 +511,7 @@ export const useSerialStore = create<SerialState>()(
           ...cmd,
           isActive: false,
         })),
+        showSendPanel: state.showSendPanel,
       }),
     }
   )

@@ -22,11 +22,13 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { PanelRightOpen } from 'lucide-react'
+import { useSerialStore } from '@/store/serialStore'
 
 function MainContent() {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const { open, setOpen } = useSidebar()
   const [triggerResize, setTriggerResize] = useState(0)
+  const showSendPanel = useSerialStore((state) => state.showSendPanel)
 
   const handleToggleFullscreen = useCallback(() => {
     const newFullscreen = !isFullscreen
@@ -73,7 +75,7 @@ function MainContent() {
             resizeTrigger={triggerResize}
           />
         </div>
-        {!isFullscreen && (
+        {!isFullscreen && showSendPanel && (
           <div className="flex-shrink-0">
             <SerialSender />
           </div>
