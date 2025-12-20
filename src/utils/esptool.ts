@@ -127,13 +127,17 @@ export async function flashWithEspTool(
   // Hard reset the chip to run the new firmware
   terminal.writeLine('Resetting device...')
   try {
-    await loader.after('hard_reset')
-  } catch {
-    // Some devices may not support hard reset via RTS
-    terminal.writeLine('Note: Manual reset may be required')
+    await loader.after('hard_reset', false)
+    terminal.writeLine('Hard reset signal sent via RTS')
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error)
+    terminal.writeLine(`Reset error: ${msg}`)
   }
 
-  terminal.writeLine('Flash complete!')
+  terminal.writeLine('')
+  terminal.writeLine('=== Flash complete! ===')
+  terminal.writeLine('If device did not restart automatically, press the RESET button on your board.')
+  terminal.writeLine('(ESP32-C3/S3 with native USB require manual reset)')
 }
 
 export async function flashRawBinary(
