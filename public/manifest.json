@@ -1,0 +1,23 @@
+{
+  "name": "WebUART - Web Serial API Terminal",
+  "short_name": "WebUART",
+  "description": "Browser-based serial port terminal for Arduino, ESP32, and other microcontrollers",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["developer", "utilities"],
+  "lang": "en",
+  "dir": "ltr"
+}
+
+
