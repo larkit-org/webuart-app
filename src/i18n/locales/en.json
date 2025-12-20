@@ -1,4 +1,8 @@
 {
+  "nav": {
+    "terminal": "Terminal",
+    "flash": "Flash"
+  },
   "serialMonitor": {
     "title": "Serial Monitor",
     "clear": "Clear",
@@ -103,5 +107,82 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "flash": {
+    "title": "Firmware Flasher",
+    "description": "Flash firmware to ESP32 and other devices",
+    "mode": {
+      "label": "Flashing Mode",
+      "esp": "ESP Mode",
+      "espDescription": "Flash ESP32/ESP8266 chips using esptool protocol",
+      "raw": "Raw Binary",
+      "rawDescription": "Send binary file directly through serial port"
+    },
+    "complexity": {
+      "simple": "Simple",
+      "advanced": "Advanced"
+    },
+    "chipInfo": {
+      "title": "Detected Chip",
+      "family": "Family",
+      "features": "Features",
+      "mac": "MAC",
+      "flash": "Flash Size"
+    },
+    "files": {
+      "upload": "Upload Firmware",
+      "uploadMultiple": "Upload Firmware Files",
+      "dropzone": "Drag & drop .bin file here or click to browse",
+      "singleFile": "Single file mode",
+      "multipleFiles": "Multiple files supported",
+      "address": "Address (hex)",
+      "addressPlaceholder": "0x0",
+      "remove": "Remove",
+      "noFiles": "No files selected",
+      "advancedHint": "Add multiple files with custom addresses for bootloader, partition table, and app",
+      "commonAddresses": "Common ESP32 addresses:"
+    },
+    "options": {
+      "title": "Options",
+      "baudRate": "Baud Rate",
+      "eraseBeforeFlash": "Erase flash before writing"
+    },
+    "actions": {
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "detectChip": "Detect Chip",
+      "flash": "Flash",
+      "flashing": "Flashing...",
+      "cancel": "Cancel",
+      "retry": "Retry"
+    },
+    "progress": {
+      "connecting": "Connecting...",
+      "detecting": "Detecting chip...",
+      "erasing": "Erasing flash...",
+      "flashing": "Flashing...",
+      "verifying": "Verifying...",
+      "success": "Flash complete!",
+      "error": "Flash failed",
+      "file": "File {{current}}/{{total}}"
+    },
+    "console": {
+      "title": "Console Output",
+      "clear": "Clear",
+      "copy": "Copy"
+    },
+    "messages": {
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "chipDetected": "Chip detected: {{chip}}"
+    },
+    "errors": {
+      "noPort": "No serial port selected",
+      "portInUse": "Serial port is in use by terminal. Please disconnect first.",
+      "noFiles": "Please select a firmware file",
+      "invalidAddress": "Invalid address format",
+      "connectionFailed": "Connection failed",
+      "flashFailed": "Flash operation failed"
+    }
   }
 }
