@@ -49,7 +49,7 @@ export const DEFAULT_FLASH_CONFIG: FlashConfig = {
   mode: 'esp',
   complexity: 'simple',
   baudRate: 921600,
-  eraseBeforeFlash: true,
+  eraseBeforeFlash: false,
   verifyAfterFlash: false,
 }
 
