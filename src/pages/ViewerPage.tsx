@@ -1,8 +1,14 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import { WebLinksAddon } from '@xterm/addon-web-links'
 import { useViewerSession, type ViewerStatus } from '@/hooks/useViewerSession'
+import { Card, CardContent } from '@/components/ui/card'
+import { TerminalToolbar } from '@/components/TerminalToolbar'
+import { Footer } from '@/components/Footer'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import { Minimize2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import '@xterm/xterm/css/xterm.css'
 
 interface ViewerPageProps {
@@ -20,7 +26,7 @@ function StatusBar({ status, error }: { status: ViewerStatus; error: string | nu
   const config = statusConfig[status]
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 border-b bg-background">
+    <header className="flex items-center gap-2 h-12 px-4 border-b bg-background shrink-0">
       <a href="/" className="flex items-center gap-2 hover:opacity-80" onClick={(e) => { e.preventDefault(); window.location.hash = '' }}>
         <img src="/logo.png" alt="WebUART" className="w-5 h-5 dark:invert" />
         <span className="text-sm font-semibold hidden sm:inline">WebUART</span>
@@ -28,8 +34,11 @@ function StatusBar({ status, error }: { status: ViewerStatus; error: string | nu
       <div className="w-px h-4 bg-border mx-1" />
       <div className={`w-2 h-2 rounded-full ${config.color} ${status === 'connected' ? 'animate-pulse' : ''}`} />
       <span className="text-sm text-muted-foreground">{config.label}</span>
-      <span className="ml-auto text-xs text-muted-foreground">Remote Viewer</span>
-    </div>
+      <div className="ml-auto flex items-center gap-2">
+        <span className="text-xs text-muted-foreground hidden sm:inline">Remote Viewer</span>
+        <ThemeToggle />
+      </div>
+    </header>
   )
 }
 
@@ -38,6 +47,11 @@ export function ViewerPage({ sessionId }: ViewerPageProps) {
   const terminalRef = useRef<Terminal | null>(null)
   const fitAddonRef = useRef<FitAddon | null>(null)
   const { status, error, onData } = useViewerSession(sessionId)
+  const [followLogs, setFollowLogs] = useState(true)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const followLogsRef = useRef(followLogs)
+
+  useEffect(() => { followLogsRef.current = followLogs }, [followLogs])
 
   // Initialize terminal
   useEffect(() => {
@@ -86,18 +100,67 @@ export function ViewerPage({ sessionId }: ViewerPageProps) {
   useEffect(() => {
     onData((data: string) => {
       terminalRef.current?.write(data)
+      if (followLogsRef.current) {
+        terminalRef.current?.scrollToBottom()
+      }
     })
   }, [onData])
+
+  // Refit on fullscreen change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try { fitAddonRef.current?.fit() } catch { /* ignore */ }
+    }, 50)
+    return () => clearTimeout(timer)
+  }, [isFullscreen])
+
+  // Escape to exit fullscreen
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFullscreen) setIsFullscreen(false)
+    }
+    window.addEventListener('keydown', handleKeydown)
+    return () => window.removeEventListener('keydown', handleKeydown)
+  }, [isFullscreen])
+
+  if (isFullscreen) {
+    return (
+      <div className="h-screen w-screen bg-[#1a1a1a] relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-2 right-2 z-10 h-7 w-7 text-white/50 hover:text-white hover:bg-white/10"
+          onClick={() => setIsFullscreen(false)}
+        >
+          <Minimize2 className="h-4 w-4" />
+        </Button>
+        <div ref={containerRef} className="h-full w-full" />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col h-screen bg-background">
       <StatusBar status={status} error={error} />
-      <div className="flex-1 min-h-0 p-2">
-        <div
-          ref={containerRef}
-          className="h-full w-full rounded-md overflow-hidden bg-[#1a1a1a]"
-        />
+      <div className="flex flex-1 flex-col gap-3 p-3 overflow-hidden min-h-0">
+        <Card className="flex-1 min-h-0 flex flex-col overflow-hidden">
+          <TerminalToolbar
+            terminalRef={terminalRef}
+            followLogs={followLogs}
+            onFollowLogsChange={setFollowLogs}
+            isFullscreen={false}
+            onToggleFullscreen={() => setIsFullscreen(true)}
+            exportFilename="remote-session"
+          />
+          <CardContent className="flex-1 p-2 pt-0 min-h-0 relative">
+            <div
+              ref={containerRef}
+              className="absolute inset-0 m-2 mt-0 rounded-md overflow-hidden bg-[#1a1a1a]"
+            />
+          </CardContent>
+        </Card>
       </div>
+      <Footer />
     </div>
   )
 }
