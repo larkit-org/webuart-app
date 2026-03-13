@@ -12,8 +12,8 @@ interface TerminalToolbarProps {
   terminalRef: React.RefObject<Terminal | null>
   followLogs: boolean
   onFollowLogsChange: (value: boolean) => void
-  isFullscreen: boolean
-  onToggleFullscreen: () => void
+  isFullscreen?: boolean
+  onToggleFullscreen?: () => void
   exportFilename?: string
   /** Extra controls rendered before Follow toggle */
   leading?: ReactNode
@@ -70,15 +70,17 @@ export function TerminalToolbar({
       <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={exportLogs}>
         {t('serialMonitor.export')}
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="h-7 w-7"
-        onClick={onToggleFullscreen}
-        title={isFullscreen ? t('serialMonitor.minimize') : t('serialMonitor.maximize')}
-      >
-        {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-      </Button>
+      {onToggleFullscreen && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7"
+          onClick={onToggleFullscreen}
+          title={isFullscreen ? t('serialMonitor.minimize') : t('serialMonitor.maximize')}
+        >
+          {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+        </Button>
+      )}
     </div>
   )
 }

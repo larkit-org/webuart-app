@@ -7,8 +7,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { TerminalToolbar } from '@/components/TerminalToolbar'
 import { Footer } from '@/components/Footer'
 import { ThemeToggle } from '@/components/ThemeToggle'
-import { Minimize2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import '@xterm/xterm/css/xterm.css'
 
 interface ViewerPageProps {
@@ -48,7 +46,6 @@ export function ViewerPage({ sessionId }: ViewerPageProps) {
   const fitAddonRef = useRef<FitAddon | null>(null)
   const { status, error, onData } = useViewerSession(sessionId)
   const [followLogs, setFollowLogs] = useState(true)
-  const [isFullscreen, setIsFullscreen] = useState(false)
   const followLogsRef = useRef(followLogs)
 
   useEffect(() => { followLogsRef.current = followLogs }, [followLogs])
@@ -106,39 +103,6 @@ export function ViewerPage({ sessionId }: ViewerPageProps) {
     })
   }, [onData])
 
-  // Refit on fullscreen change
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      try { fitAddonRef.current?.fit() } catch { /* ignore */ }
-    }, 50)
-    return () => clearTimeout(timer)
-  }, [isFullscreen])
-
-  // Escape to exit fullscreen
-  useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isFullscreen) setIsFullscreen(false)
-    }
-    window.addEventListener('keydown', handleKeydown)
-    return () => window.removeEventListener('keydown', handleKeydown)
-  }, [isFullscreen])
-
-  if (isFullscreen) {
-    return (
-      <div className="h-screen w-screen bg-[#1a1a1a] relative">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2 z-10 h-7 w-7 text-white/50 hover:text-white hover:bg-white/10"
-          onClick={() => setIsFullscreen(false)}
-        >
-          <Minimize2 className="h-4 w-4" />
-        </Button>
-        <div ref={containerRef} className="h-full w-full" />
-      </div>
-    )
-  }
-
   return (
     <div className="flex flex-col h-screen bg-background">
       <StatusBar status={status} error={error} />
@@ -148,8 +112,6 @@ export function ViewerPage({ sessionId }: ViewerPageProps) {
             terminalRef={terminalRef}
             followLogs={followLogs}
             onFollowLogsChange={setFollowLogs}
-            isFullscreen={false}
-            onToggleFullscreen={() => setIsFullscreen(true)}
             exportFilename="remote-session"
           />
           <CardContent className="flex-1 p-2 pt-0 min-h-0 relative">
