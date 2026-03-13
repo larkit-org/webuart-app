@@ -7,8 +7,8 @@
     <!-- Primary Meta Tags -->
     <title>WebUART - Web Serial API Terminal | Arduino ESP32 Serial Monitor</title>
     <meta name="title" content="WebUART - Web Serial API Terminal | Arduino ESP32 Serial Monitor" />
-    <meta name="description" content="WebUART is a browser-based serial port terminal. Connect to Arduino, ESP32, and other microcontrollers directly from your browser using the Web Serial API. Monitor, send data, and log serial communications. No installation required." />
-    <meta name="keywords" content="web serial, serial terminal, arduino, esp32, uart, serial monitor, web serial api, browser serial, usb serial, microcontroller, embedded development, serial communication, arduino ide alternative, esp32 monitor" />
+    <meta name="description" content="WebUART is a browser-based serial port terminal and firmware flasher. Connect to Arduino, ESP32, and other microcontrollers directly from your browser using the Web Serial API. Monitor, send data, log serial communications, flash firmware, and share live sessions with colleagues. No installation required." />
+    <meta name="keywords" content="web serial, serial terminal, arduino, esp32, uart, serial monitor, web serial api, browser serial, usb serial, microcontroller, embedded development, serial communication, arduino ide alternative, esp32 monitor, firmware flasher, esptool, session sharing, remote debugging" />
     <meta name="author" content="WebUART" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
@@ -26,7 +26,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://webuart.app/" />
     <meta property="og:title" content="WebUART - Web Serial API Terminal | Arduino ESP32 Serial Monitor" />
-    <meta property="og:description" content="Browser-based serial port terminal. Connect to Arduino, ESP32, and other microcontrollers directly from your browser using the Web Serial API. No installation required." />
+    <meta property="og:description" content="Browser-based serial port terminal and firmware flasher. Connect to Arduino, ESP32, and other microcontrollers. Flash firmware, share live sessions, and log data. No installation required." />
     <meta property="og:image" content="https://webuart.app/logo.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -38,7 +38,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://webuart.app/" />
     <meta name="twitter:title" content="WebUART - Web Serial API Terminal | Arduino ESP32 Serial Monitor" />
-    <meta name="twitter:description" content="Browser-based serial port terminal. Connect to Arduino, ESP32, and other microcontrollers directly from your browser using the Web Serial API." />
+    <meta name="twitter:description" content="Browser-based serial port terminal and firmware flasher. Connect to Arduino, ESP32, and other microcontrollers. Flash firmware, share live sessions, and log data. No installation required." />
     <meta name="twitter:image" content="https://webuart.app/logo.png" />
     <meta name="twitter:image:alt" content="WebUART - Web Serial API Terminal" />
 
@@ -55,24 +55,22 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "WebUART",
-      "description": "Browser-based serial port terminal for Arduino, ESP32, and other microcontrollers using Web Serial API",
+      "description": "Browser-based serial port terminal and firmware flasher for Arduino, ESP32, and other microcontrollers using Web Serial API",
       "url": "https://webuart.app/",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web Browser",
       "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "5",
-        "ratingCount": "1"
+        "priceCurrency": "USD",
+        "description": "Free core features with optional premium session sharing"
       },
       "featureList": [
         "Web Serial API support",
         "Real-time serial monitoring",
         "Arduino and ESP32 compatible",
+        "ESP32 firmware flashing via esptool",
+        "Live session sharing via secret link",
         "No installation required",
         "Cross-platform browser support",
         "Data logging",
@@ -87,8 +85,8 @@
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "WebUART",
-      "softwareVersion": "1.1.1",
-      "description": "Web-based serial terminal application for embedded development",
+      "softwareVersion": "1.3.0",
+      "description": "Web-based serial terminal and firmware flasher for embedded development with live session sharing",
       "url": "https://webuart.app/",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Chrome, Edge, Opera",
