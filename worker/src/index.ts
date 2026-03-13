@@ -30,7 +30,9 @@ function jsonResponse(data: unknown, status: number, request: Request): Response
 
 // Simple in-memory rate limit and concurrent session tracking (best-effort, resets on redeploy)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-const concurrentSessions = new Map<string, Set<string>>() // ip -> set of sessionIds
+const concurrentSessions = new Map<string, Map<string, number>>() // ip -> map of sessionId -> createdAt
+
+const SESSION_TTL_MS = 35 * 60 * 1000 // 35 min (slightly more than max session duration)
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now()
@@ -45,14 +47,22 @@ function checkRateLimit(ip: string): boolean {
 
 function checkConcurrentLimit(ip: string): boolean {
   const sessions = concurrentSessions.get(ip)
-  return !sessions || sessions.size < 2
+  if (!sessions) return true
+  // Evict expired sessions
+  const now = Date.now()
+  for (const [id, createdAt] of sessions) {
+    if (now - createdAt > SESSION_TTL_MS) {
+      sessions.delete(id)
+    }
+  }
+  return sessions.size < 2
 }
 
 function trackSession(ip: string, sessionId: string) {
   if (!concurrentSessions.has(ip)) {
-    concurrentSessions.set(ip, new Set())
+    concurrentSessions.set(ip, new Map())
   }
-  concurrentSessions.get(ip)!.add(sessionId)
+  concurrentSessions.get(ip)!.set(sessionId, Date.now())
 }
 
 export default {
