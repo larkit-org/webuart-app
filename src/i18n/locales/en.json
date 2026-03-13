@@ -92,6 +92,19 @@
       "daysAgo": "{{n}} days ago"
     }
   },
+  "shareSession": {
+    "title": "Share Session",
+    "startSharing": "Start Sharing",
+    "stopSharing": "Stop Sharing",
+    "copyLink": "Copy Link",
+    "copied": "Link copied!",
+    "waitingForViewer": "Waiting for viewer...",
+    "viewerConnected": "Viewer connected",
+    "viewerDisconnected": "Viewer disconnected",
+    "creating": "Creating session...",
+    "error": "Sharing failed",
+    "limitReached": "Session limit reached"
+  },
   "header": {
     "viewOnGithub": "View on GitHub"
   },

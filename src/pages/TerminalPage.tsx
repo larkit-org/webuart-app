@@ -7,6 +7,7 @@ import {
   TimedCommands,
   LogRecords,
   Footer,
+  ShareSession,
 } from '@/components'
 import {
   Sidebar,
@@ -89,6 +90,7 @@ export function TerminalPage() {
               <QuickCommands />
               <TimedCommands />
               <LogRecords />
+              <ShareSession />
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
