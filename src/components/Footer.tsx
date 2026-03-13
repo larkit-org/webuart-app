@@ -11,12 +11,12 @@ export function Footer() {
             All data stays in your browser — no tracking, no cookies
           </p>
           <span className="hidden md:inline text-muted-foreground/50">|</span>
-          <p>Open source & free to use</p>
+          <p>Open source</p>
         </div>
 
         <div className="flex items-center gap-3">
           <a
-            href="https://github.com/cyberkostyan/webuart"
+            href="https://github.com/larkit-org/webuart-app"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 hover:text-foreground transition-colors"
