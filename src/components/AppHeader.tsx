@@ -1,6 +1,6 @@
 import { ThemeToggle } from './ThemeToggle'
 import type { ReactNode } from 'react'
-import { useRouter, type Route } from '@/hooks/useRouter'
+import { useRouter } from '@/hooks/useRouter'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Terminal, Cpu } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +12,9 @@ interface AppHeaderProps {
 export function AppHeader({ children }: AppHeaderProps) {
   const { route, navigate } = useRouter()
   const { t } = useTranslation()
+
+  // Map discriminated union page to toggle value string
+  const activeTab = route.page === 'flash' ? '/flash' : '/'
 
   return (
     <div className="flex justify-between items-center w-full">
@@ -25,8 +28,8 @@ export function AppHeader({ children }: AppHeaderProps) {
         {/* Navigation tabs */}
         <ToggleGroup
           type="single"
-          value={route}
-          onValueChange={(value) => value && navigate(value as Route)}
+          value={activeTab}
+          onValueChange={(value) => value && navigate(value)}
           className="ml-2"
         >
           <ToggleGroupItem value="/" aria-label={t('nav.terminal', 'Terminal')} className="gap-1.5 px-3">
