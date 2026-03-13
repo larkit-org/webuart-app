@@ -21,9 +21,14 @@ function StatusBar({ status, error }: { status: ViewerStatus; error: string | nu
 
   return (
     <div className="flex items-center gap-2 px-4 py-2 border-b bg-background">
+      <a href="/" className="flex items-center gap-2 hover:opacity-80" onClick={(e) => { e.preventDefault(); window.location.hash = '' }}>
+        <img src="/logo.png" alt="WebUART" className="w-5 h-5 dark:invert" />
+        <span className="text-sm font-semibold hidden sm:inline">WebUART</span>
+      </a>
+      <div className="w-px h-4 bg-border mx-1" />
       <div className={`w-2 h-2 rounded-full ${config.color} ${status === 'connected' ? 'animate-pulse' : ''}`} />
       <span className="text-sm text-muted-foreground">{config.label}</span>
-      <span className="ml-auto text-xs text-muted-foreground">WebUART Remote Viewer</span>
+      <span className="ml-auto text-xs text-muted-foreground">Remote Viewer</span>
     </div>
   )
 }
