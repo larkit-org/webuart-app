@@ -102,7 +102,6 @@ export function useShareSession(): ShareSessionResult {
 
         // Subscribe to serial data
         const handleData = (event: SerialEvent) => {
-          console.log('[ShareSession] data event:', !!event.data, 'wsReady:', ws.readyState === WebSocket.OPEN)
           if (event.data && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ type: 'data', payload: event.data }))
           }

@@ -76,7 +76,9 @@ export function useViewerSession(sessionId: string): ViewerSessionResult {
     }
 
     return () => {
-      ws.close()
+      if (ws.readyState === WebSocket.CONNECTING || ws.readyState === WebSocket.OPEN) {
+        ws.close()
+      }
       wsRef.current = null
     }
   }, [sessionId])
