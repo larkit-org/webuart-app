@@ -1,0 +1,15 @@
+{
+  "name": "webuart-api",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.54.0",
+    "@cloudflare/workers-types": "^4.20250313.0",
+    "typescript": "~5.9.3"
+  }
+}
