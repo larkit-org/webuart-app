@@ -1,8 +1,19 @@
+<div align="center">
+
+<img src="public/logo.png" alt="WebUART" width="120" />
+
 # WebUART
 
-Browser-based serial terminal and firmware flasher for embedded development. Connect to Arduino, ESP32, and other microcontrollers directly from your browser using the [Web Serial API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API).
+Browser-based serial terminal and firmware flasher for embedded development.
 
-**[webuart.app](https://webuart.app)**
+[**webuart.app**](https://webuart.app)
+
+[![Open Source](https://img.shields.io/badge/open_source-yes-green)](https://github.com/larkit-org/webuart-app)
+[![Made by Lark IT](https://img.shields.io/badge/made_by-Lark_IT-blue)](https://larkit.org)
+
+</div>
+
+Connect to Arduino, ESP32, and other microcontrollers directly from your browser using the [Web Serial API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API). No installation required.
 
 ## Features
 
