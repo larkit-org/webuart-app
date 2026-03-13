@@ -8,9 +8,9 @@ interface ViewerSessionResult {
   onData: (callback: (data: string) => void) => void
 }
 
-function getApiBase(): string {
+function getWsBase(): string {
   if (window.location.hostname === 'localhost') {
-    return `ws://${window.location.host}`
+    return 'ws://localhost:8787'
   }
   return 'wss://api.webuart.app'
 }
@@ -30,7 +30,7 @@ export function useViewerSession(sessionId: string): ViewerSessionResult {
   }, [])
 
   useEffect(() => {
-    const wsUrl = `${getApiBase()}/api/sessions/${sessionId}/ws?role=viewer`
+    const wsUrl = `${getWsBase()}/api/sessions/${sessionId}/ws?role=viewer`
     const ws = new WebSocket(wsUrl)
     wsRef.current = ws
 

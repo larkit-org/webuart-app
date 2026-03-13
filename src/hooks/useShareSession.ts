@@ -16,14 +16,14 @@ interface ShareSessionResult {
 
 function getApiBase(): string {
   if (window.location.hostname === 'localhost') {
-    return window.location.origin
+    return 'http://localhost:8787'
   }
   return 'https://api.webuart.app'
 }
 
 function getWsBase(): string {
   if (window.location.hostname === 'localhost') {
-    return `ws://${window.location.host}`
+    return 'ws://localhost:8787'
   }
   return 'wss://api.webuart.app'
 }
@@ -102,6 +102,7 @@ export function useShareSession(): ShareSessionResult {
 
         // Subscribe to serial data
         const handleData = (event: SerialEvent) => {
+          console.log('[ShareSession] data event:', !!event.data, 'wsReady:', ws.readyState === WebSocket.OPEN)
           if (event.data && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ type: 'data', payload: event.data }))
           }

@@ -118,6 +118,8 @@ export class SessionRoom implements DurableObject {
     const tags = this.state.getTags(ws)
     const isHost = tags.includes('host')
 
+    console.log('[DO] msg:', parsed.type, 'isHost:', isHost, 'hasViewer:', !!this.viewerWs, 'payloadLen:', parsed.payload?.length ?? 0)
+
     if (isHost) {
       this.lastHostMessage = Date.now()
 
