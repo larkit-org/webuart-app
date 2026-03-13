@@ -28,11 +28,8 @@ function jsonResponse(data: unknown, status: number, request: Request): Response
   })
 }
 
-// Simple in-memory rate limit and concurrent session tracking (best-effort, resets on redeploy)
+// Simple in-memory rate limit (best-effort, resets on redeploy)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-const concurrentSessions = new Map<string, Map<string, number>>() // ip -> map of sessionId -> createdAt
-
-const SESSION_TTL_MS = 35 * 60 * 1000 // 35 min (slightly more than max session duration)
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now()
@@ -43,26 +40,6 @@ function checkRateLimit(ip: string): boolean {
   }
   entry.count++
   return entry.count <= 5
-}
-
-function checkConcurrentLimit(ip: string): boolean {
-  const sessions = concurrentSessions.get(ip)
-  if (!sessions) return true
-  // Evict expired sessions
-  const now = Date.now()
-  for (const [id, createdAt] of sessions) {
-    if (now - createdAt > SESSION_TTL_MS) {
-      sessions.delete(id)
-    }
-  }
-  return sessions.size < 2
-}
-
-function trackSession(ip: string, sessionId: string) {
-  if (!concurrentSessions.has(ip)) {
-    concurrentSessions.set(ip, new Map())
-  }
-  concurrentSessions.get(ip)!.set(sessionId, Date.now())
 }
 
 export default {
@@ -77,19 +54,13 @@ export default {
 
     // POST /api/sessions — create a new session
     if (request.method === 'POST' && path === '/api/sessions') {
-      const ip = request.headers.get('cf-connecting-ip') || 'unknown'
+      const ip = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || '127.0.0.1'
       if (!checkRateLimit(ip)) {
         return jsonResponse({ error: 'Rate limit exceeded' }, 429, request)
-      }
-      if (!checkConcurrentLimit(ip)) {
-        return jsonResponse({ error: 'Too many concurrent sessions' }, 429, request)
       }
 
       const sessionId = crypto.randomUUID()
       const hostToken = crypto.randomUUID()
-
-      // Track concurrent session for this IP
-      trackSession(ip, sessionId)
 
       // Initialize the Durable Object with hostToken
       const doId = env.SESSION_ROOM.idFromName(sessionId)
