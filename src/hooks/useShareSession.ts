@@ -85,34 +85,49 @@ export function useShareSession(): ShareSessionResult {
       const { sessionId, hostToken, url } = await res.json()
       setShareUrl(url)
 
-      // Connect WebSocket as host
-      const wsUrl = `${getWsBase()}/api/sessions/${sessionId}/ws?role=host&token=${hostToken}`
+      // Store token in ref for rotation
+      const hostTokenRef = { current: hostToken }
+
+      // Connect WebSocket as host (no token in URL)
+      const wsUrl = `${getWsBase()}/api/sessions/${sessionId}/ws?role=host`
       const ws = new WebSocket(wsUrl)
       wsRef.current = ws
 
       ws.onopen = () => {
-        setStatus('sharing')
-
-        // Start ping interval
-        pingIntervalRef.current = setInterval(() => {
-          if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'ping' }))
-          }
-        }, PING_INTERVAL_MS)
-
-        // Subscribe to serial data
-        const handleData = (event: SerialEvent) => {
-          if (event.data && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'data', payload: event.data }))
-          }
-        }
-        dataHandlerRef.current = handleData
-        useSerialStore.getState().addEventListener('data', handleData)
+        // Send auth as the first message
+        ws.send(JSON.stringify({ type: 'auth', token: hostTokenRef.current }))
       }
 
       ws.onmessage = (event) => {
         try {
           const msg = JSON.parse(event.data)
+
+          if (msg.type === 'auth_ok') {
+            // Save rotated token for potential reconnect
+            if (msg.newToken) {
+              hostTokenRef.current = msg.newToken
+            }
+
+            setStatus('sharing')
+
+            // Start ping interval after successful auth
+            pingIntervalRef.current = setInterval(() => {
+              if (ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: 'ping' }))
+              }
+            }, PING_INTERVAL_MS)
+
+            // Subscribe to serial data
+            const handleData = (event: SerialEvent) => {
+              if (event.data && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: 'data', payload: event.data }))
+              }
+            }
+            dataHandlerRef.current = handleData
+            useSerialStore.getState().addEventListener('data', handleData)
+            return
+          }
+
           if (msg.type === 'viewer_connected') setViewerState('connected')
           if (msg.type === 'viewer_disconnected') setViewerState('waiting')
           if (msg.type === 'session_closed') {

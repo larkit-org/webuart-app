@@ -3,10 +3,13 @@ interface SessionMessage {
   payload?: string
   code?: string
   message?: string
+  token?: string
+  newToken?: string
 }
 
 interface SessionState {
   hostToken: string
+  hostAuthenticated: boolean
   buffer: string[]
   bufferBytes: number
   totalBytes: number
@@ -60,6 +63,7 @@ export class SessionRoom implements DurableObject {
       const body = await request.json() as { hostToken: string }
       this.sessionState = {
         hostToken: body.hostToken,
+        hostAuthenticated: false,
         buffer: [],
         bufferBytes: 0,
         totalBytes: 0,
@@ -73,10 +77,9 @@ export class SessionRoom implements DurableObject {
 
     // WebSocket upgrade
     const role = url.searchParams.get('role')
-    const token = url.searchParams.get('token')
 
     if (role === 'host') {
-      return this.handleHostUpgrade(token)
+      return this.handleHostUpgrade()
     }
 
     if (role === 'viewer') {
@@ -86,13 +89,10 @@ export class SessionRoom implements DurableObject {
     return new Response('Bad request', { status: 400 })
   }
 
-  private async handleHostUpgrade(token: string | null): Promise<Response> {
+  private async handleHostUpgrade(): Promise<Response> {
     const s = await this.getSessionState()
     if (!s) {
       return this.wsError('SESSION_NOT_FOUND', 'Session not initialized')
-    }
-    if (token !== s.hostToken) {
-      return this.wsError('INVALID_TOKEN', 'Invalid host token')
     }
     if (this.getHostWs()) {
       return this.wsError('HOST_EXISTS', 'Host already connected')
@@ -100,6 +100,7 @@ export class SessionRoom implements DurableObject {
 
     const pair = new WebSocketPair()
     this.state.acceptWebSocket(pair[1], ['host'])
+    s.hostAuthenticated = false
     s.lastHostMessage = Date.now()
     await this.saveSessionState()
 
@@ -155,6 +156,25 @@ export class SessionRoom implements DurableObject {
     if (isHost) {
       const s = await this.getSessionState()
       if (!s) return
+
+      // Handle auth as the first message from host
+      if (!s.hostAuthenticated) {
+        if (parsed.type === 'auth' && parsed.token) {
+          if (parsed.token === s.hostToken) {
+            const newToken = crypto.randomUUID()
+            s.hostToken = newToken
+            s.hostAuthenticated = true
+            s.lastHostMessage = Date.now()
+            await this.saveSessionState()
+            this.sendTo(ws, { type: 'auth_ok', newToken })
+          } else {
+            this.sendTo(ws, { type: 'error', code: 'INVALID_TOKEN', message: 'Invalid host token' })
+            try { ws.close(1008, 'Invalid token') } catch { /* ignore */ }
+          }
+        }
+        // Ignore all other messages until authenticated
+        return
+      }
 
       s.lastHostMessage = Date.now()
 
